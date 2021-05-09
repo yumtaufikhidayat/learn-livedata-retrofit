@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.taufik.livedatawithretrofit.api.ApiConfig
+import com.taufik.livedatawithretrofit.event.Event
 import com.taufik.livedatawithretrofit.model.CustomerReview
 import com.taufik.livedatawithretrofit.model.PostReviewResponse
 import com.taufik.livedatawithretrofit.model.Restaurant
@@ -23,6 +24,9 @@ class MainViewModel : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _snackbarText = MutableLiveData<Event.Event<String>>()
+    val snackbarText: LiveData<Event.Event<String>> = _snackbarText
 
     companion object {
         private const val TAG = "MainViewModel"
@@ -68,6 +72,7 @@ class MainViewModel : ViewModel() {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     _listReview.value = response.body()?.customerReviews
+                    _snackbarText.value = Event.Event(response.body()?.message.toString())
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }

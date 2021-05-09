@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.taufik.livedatawithretrofit.databinding.ActivityMainBinding
 import com.taufik.livedatawithretrofit.viewmodel.MainViewModel
 
@@ -50,6 +51,12 @@ class MainActivity : AppCompatActivity() {
 
             mainViewModel.isLoading.observe(this@MainActivity, {
                 progressBar.visibility = if (it) View.VISIBLE else View.GONE
+            })
+
+            mainViewModel.snackbarText.observe(this@MainActivity, {
+                it.getContentIfNotHandled()?.let { snackBarText->
+                    Snackbar.make(window.decorView.rootView, snackBarText, Snackbar.LENGTH_SHORT).show()
+                }
             })
         }
     }
